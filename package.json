@@ -19,9 +19,11 @@
     "test": "builder run npm:test"
   },
   "dependencies": {
+    "autolayout": "^0.5.3",
     "builder": "^2.8.0",
     "builder-radium-component": "^1.0.1",
     "coveralls": "^2.11.8",
+    "lodash.isplainobject": "^4.0.3",
     "operative": "^0.4.4",
     "react": "^0.14.7",
     "react-dom": "^0.14.7"
@@ -33,13 +35,17 @@
     "builder": "^2.8.0",
     "builder-radium-component-dev": "^1.0.1",
     "chai": "^3.2.0",
+    "enzyme": "^2.1.0",
+    "eslint-plugin-flow-vars": "^0.2.1",
+    "exports-loader": "^0.6.3",
     "mocha": "^2.3.3",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.7",
     "react-dom": "^0.14.6",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "worker-loader": "^0.7.0"
   },
   "author": "Tyler Thompson"
 }

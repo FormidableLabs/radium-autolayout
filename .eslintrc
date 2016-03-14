@@ -1,3 +1,10 @@
 {
-  "extends": "./node_modules/builder-radium-component/config/eslint/.eslintrc-client"
+  "extends": "./node_modules/builder-radium-component/config/eslint/.eslintrc-client-test",
+  "plugins": [
+   "flow-vars"
+  ],
+  "rules": {
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1
+  }
 }
