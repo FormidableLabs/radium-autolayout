@@ -1,89 +1,165 @@
-// TODO: return a new ConstraintBuilder instead of mutating it
+// Not typechecking with flow (doesn't support getters yet)
+
+import type { Constraint, Priority } from "autolayout";
+
 class ConstraintBuilder {
-  constructor(leftView, leftAttr) {
-    this.constraint = {
-      view1: leftView,
-      attr1: leftAttr
-    };
+  constraint: ?Constraint;
+  constructor(constraint) {
+    this.constraint = constraint || null;
   }
 
-  equals(rightView, rightAttr) {
-    this.constraint = {
-      ...this.constraint,
-      relation: "equ",
-      view2: rightView,
-      attr2: rightAttr
-    };
-    return this;
+  whichSide(prop: "view" | "attr"): number {
+    return this.constraint && `${prop}1` in this.constraint ? 2 : 1;
   }
 
-  lessThanOrEqualTo(rightView, rightAttr) {
-    this.constraint = {
+  subview(name: string): ConstraintBuilder {
+    const side = this.whichSide("view");
+    return new ConstraintBuilder({
       ...this.constraint,
-      relation: "leq",
-      view2: rightView,
-      attr2: rightAttr
-    };
-    return this;
+      [`view${side}`]: name
+    });
   }
 
-  greaterThanOrEqualTo(rightView, rightAttr) {
-    this.constraint = {
+  get superview(): ConstraintBuilder {
+    const side = this.whichSide("view");
+    return new ConstraintBuilder({
       ...this.constraint,
-      relation: "geq",
-      view2: rightView,
-      attr2: rightAttr
-    };
-    return this;
+      [`view${side}`]: null
+    });
   }
 
-  constant(constant) {
-    this.constraint = {
+  get to(): ConstraintBuilder {
+    return new ConstraintBuilder(this.constraint);
+  }
+
+  get be(): ConstraintBuilder {
+    return new ConstraintBuilder(this.constraint);
+  }
+
+  get equal(): ConstraintBuilder {
+    return new ConstraintBuilder({
       ...this.constraint,
-      relation: "equ",
+      relation: "equ"
+    });
+  }
+
+  get lessThanOrEqualTo(): ConstraintBuilder {
+    return new ConstraintBuilder({
+      ...this.constraint,
+      relation: "leq"
+    });
+  }
+
+  get greaterThanOrEqualTo(): ConstraintBuilder {
+    return new ConstraintBuilder({
+      ...this.constraint,
+      relation: "geq"
+    });
+  }
+
+  get width(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "width"
+    });
+  }
+
+  get height(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "height"
+    });
+  }
+
+  get top(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "top"
+    });
+  }
+
+  get left(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "left"
+    });
+  }
+
+  get bottom(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "bottom"
+    });
+  }
+
+  get right(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "right"
+    });
+  }
+
+  get centerX(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "centerX"
+    });
+  }
+
+  get centerY(): ConstraintBuilder {
+    const side = this.whichSide("attr");
+    return new ConstraintBuilder({
+      ...this.constraint,
+      [`attr${side}`]: "centerY"
+    });
+  }
+
+  constant(constant: number): ConstraintBuilder {
+    return new ConstraintBuilder({
+      ...this.constraint,
       attr2: "const",
       constant
-    };
-    return this;
+    });
   }
 
-  plus(constant) {
-    this.constraint = {
+  plus(constant: number): ConstraintBuilder {
+    return new ConstraintBuilder({
       ...this.constraint,
       constant
-    };
-    return this;
+    });
   }
 
-  minus(constant) {
-    this.constraint = {
+  minus(constant: number): ConstraintBuilder {
+    return new ConstraintBuilder({
       ...this.constraint,
       constant: -constant
-    };
-    return this;
+    });
   }
 
-  times(multiplier) {
-    this.constraint = {
+  times(multiplier: number): ConstraintBuilder {
+    return new ConstraintBuilder({
       ...this.constraint,
       multiplier
-    };
-    return this;
+    });
   }
 
-  withPriority(priority) {
-    this.constraint = {
+  withPriority(priority: Priority): ConstraintBuilder {
+    return new ConstraintBuilder({
       ...this.constraint,
       priority
-    };
-    return this;
+    });
   }
 
-  build() {
+  build(): ?Constraint {
     return this.constraint;
   }
 }
 
-export default (leftView, leftAttr) => {
-  return new ConstraintBuilder(leftView, leftAttr);
-};
+export default (): ConstraintBuilder => new ConstraintBuilder();
