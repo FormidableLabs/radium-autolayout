@@ -4,6 +4,9 @@ import type { SubView } from "autolayout";
 import type ConstraintBuilder from "./constraint-builder";
 import { View } from "autolayout";
 
+// TODO: find the right webpack configuration to make
+// the worker code standalone from the bundle.
+
 export type Layout = {
   width: number,
   height: number,
