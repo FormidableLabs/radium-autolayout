@@ -28,7 +28,8 @@
     "lodash.isplainobject": "^4.0.3",
     "operative": "^0.4.4",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "worker-loader": "^0.7.0"
   },
   "devDependencies": {
     "babel-polyfill": "^6.6.1",
@@ -47,8 +48,7 @@
     "react-dom": "^0.14.6",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
-    "webpack-dev-server": "^1.14.1",
-    "worker-loader": "^0.7.0"
+    "webpack-dev-server": "^1.14.1"
   },
   "author": "Tyler Thompson"
 }
