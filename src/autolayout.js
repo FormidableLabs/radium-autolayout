@@ -1,58 +1,31 @@
-import { Component, PropTypes, createElement } from "react";
-import ConstraintClient from "./client";
+import React, { Component, PropTypes } from "react";
+import LayoutClient from "./layout-client";
 
 export default class AutoLayout extends Component {
   constructor(props) {
     super(props);
-
-    this.constraintClient = new ConstraintClient(props, (message) => {
-      this.onLayout(message);
-    });
-
-    this.state = {
-      subviews: {}
-    };
-  }
-
-  componentWillMount() {
-    // Extract constraints and other layout props from the children
-    const rawElementTree = createElement(
-      this.props.container, null, this.props.children
-    );
-    this.constraintClient.initializeSubviews(rawElementTree);
+    this.client = new LayoutClient();
   }
 
   componentWillUnmount() {
-    this.constraintClient.deregister();
+    this.client.terminate();
+  }
+
+  render() {
+    return <div>{this.props.children}</div>;
   }
 
   getChildContext() {
     return {
-      subviews: this.state.subviews
+      client: this.client
     };
   }
 
-  onLayout(message) {
-    const { subviews } = message.payload;
-    if (subviews) {
-      this.setState({
-        subviews: message.payload.subviews
-      });
-    }
-  }
-
-  render() {
-    return createElement(
-      this.props.container, null, this.props.children
-    );
-  }
-
   static childContextTypes = {
-    subviews: PropTypes.object
+    client: PropTypes.instanceOf(LayoutClient)
   };
 
   static propTypes = {
-    container: PropTypes.string,
     children: PropTypes.node
   };
 }
