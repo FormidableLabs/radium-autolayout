@@ -16,7 +16,9 @@
     "postinstall": "cd lib || builder run npm:postinstall || (echo 'POSTINSTALL FAILED: If using npm v2, please upgrade to npm v3. See bug https://github.com/FormidableLabs/builder/issues/35' && exit 1)",
     "preversion": "builder run npm:preversion",
     "version": "builder run npm:version",
-    "test": "builder run npm:test"
+    "test": "builder run npm:test",
+    "lint": "builder concurrent lint-server lint-client lint-client-test flow",
+    "flow": "node -e \"process.exit(process.platform === 'win32' ? 0 : 1)\" || flow check"
   },
   "dependencies": {
     "autolayout": "^0.5.3",
@@ -38,6 +40,7 @@
     "enzyme": "^2.1.0",
     "eslint-plugin-flow-vars": "^0.2.1",
     "exports-loader": "^0.6.3",
+    "flow-bin": "^0.22.1",
     "mocha": "^2.3.3",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.7",
