@@ -1,8 +1,4 @@
 /* eslint-disable no-magic-numbers */
-
-// Help PhantomJS out
-require("babel-polyfill");
-
 import React from "react";
 import { AutoDOM, constrain } from "src";
 import Engine from "src/engine";

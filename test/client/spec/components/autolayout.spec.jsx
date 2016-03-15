@@ -1,6 +1,4 @@
 /* eslint-disable new-cap,no-magic-numbers */
-// Help PhantomJS out
-require("babel-polyfill");
 import React from "react";
 import AutoLayout, { View } from "src";
 import { mount } from "enzyme";

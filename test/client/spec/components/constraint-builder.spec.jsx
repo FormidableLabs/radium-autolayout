@@ -1,8 +1,4 @@
 /* eslint-disable no-magic-numbers */
-
-// Help PhantomJS out
-require("babel-polyfill");
-
 import { constrain } from "src";
 
 describe("Constraint builder", () => {
