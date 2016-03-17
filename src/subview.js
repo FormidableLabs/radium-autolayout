@@ -1,13 +1,59 @@
 // @flow
 import type { Element } from "react";
+import type { Layout } from "./engine";
 import React, { Component, PropTypes, createElement } from "react";
 
-type Props = {
+export type Props = {
   name: string,
   children: ?ReactPropTypes.node
 };
 
-export default (ComposedComponent: ReactClass): ReactClass =>
+export type Transformer = (
+  ComposedComponent: ReactClass,
+  props: Props,
+  layout: Layout
+) => Element;
+
+export type LayoutTransform = {
+  transformType: string,
+  props: Object
+};
+
+export type LayoutTransformer = (layout: Layout) => LayoutTransform;
+
+const transformer = (
+  ComposedComponent: ReactClass,
+  props: Props,
+  layout: Layout,
+  layoutTransformer: LayoutTransformer
+): Element => {
+  const layoutProps = layoutTransformer(layout);
+  const newProps = layoutProps.transformType === "style"
+    ? {...props, style: layoutProps.props}
+    : {...props, ...layoutProps.props}
+
+  return createElement(
+    ComposedComponent, newProps, props.children
+  );
+}
+// The default DOM layout map.
+// Absolutely positions with style attributes.
+const defaultLayoutTransformer = (layout: Layout): Object => {
+  return {
+    transformType: "style",
+    props: {
+      width: layout.width,
+      height: layout.height,
+      top: layout.top,
+      left: layout.left
+    }
+  };
+};
+
+export default (
+  ComposedComponent: ReactClass,
+  layoutTransformer: LayoutTransformer = defaultLayoutTransformer
+): ReactClass =>
 class extends Component {
   props: Props;
 
@@ -36,19 +82,15 @@ class extends Component {
 
     // Is this an AutoDOM component?
     if (typeof ComposedComponent === "string") {
-      const style = {
-        width: layout.width || 0,
-        height: layout.height || 0,
-        top: layout.top || 0,
-        left: layout.left || 0
-      };
-      return createElement(
+      return transformer(
         ComposedComponent,
-        {...this.props, style},
-        this.props.children
+        this.props,
+        layout,
+        layoutTransformer
       );
     }
 
+    // If not, pass the layout props to the wrapped component
     return (
       <ComposedComponent
         {...this.props}
@@ -57,4 +99,3 @@ class extends Component {
     );
   }
 };
-
