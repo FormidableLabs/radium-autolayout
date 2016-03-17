@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import LayoutClient from "./layout-client";
 
-export default class AutoLayout extends Component {
+export default class ConstraintLayout extends Component {
   constructor(props) {
     super(props);
     this.client = new LayoutClient();
@@ -29,4 +29,3 @@ export default class AutoLayout extends Component {
     children: PropTypes.node
   };
 }
-

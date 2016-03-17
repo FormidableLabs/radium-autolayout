@@ -1,19 +1,19 @@
 /* eslint-disable new-cap,no-magic-numbers */
 import React from "react";
-import AutoLayout, { View } from "src";
+import ConstraintLayout, { View } from "src";
 import { mount } from "enzyme";
 
-describe("AutoLayout component", () => {
+describe("ConstraintLayout component", () => {
   it("should instantiate a LayoutClient", () => {
     const result = mount(
-      <AutoLayout>
+      <ConstraintLayout>
         <View
           name="main"
           container="div"
           width={400}
           height={250}
         />
-      </AutoLayout>
+      </ConstraintLayout>
     );
     const client = result.node.client;
     expect(client.workers).to.be.an("array");
@@ -26,14 +26,14 @@ describe("AutoLayout component", () => {
 describe("View component", () => {
   it("should create a container from a tag name and dimensions", () => {
     const result = mount(
-      <AutoLayout>
+      <ConstraintLayout>
         <View
           name="main"
           container="div"
           width={400}
           height={250}
         />
-      </AutoLayout>
+      </ConstraintLayout>
     );
     const view = result.find(View);
     const container = view.find("div");

@@ -1,17 +1,17 @@
 {
-  "name": "radium-autolayout",
+  "name": "radium-constraints",
   "version": "0.1.0",
   "description": "Constraint-based layout system for React components.",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FormidableLabs/radium-autolayout.git"
+    "url": "https://github.com/FormidableLabs/radium-constraints.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FormidableLabs/radium-autolayout/issues"
+    "url": "https://github.com/FormidableLabs/radium-constraints/issues"
   },
-  "homepage": "https://github.com/FormidableLabs/radium-autolayout",
+  "homepage": "https://github.com/FormidableLabs/radium-constraints",
   "scripts": {
     "postinstall": "cd lib || builder run npm:postinstall || (echo 'POSTINSTALL FAILED: If using npm v2, please upgrade to npm v3. See bug https://github.com/FormidableLabs/builder/issues/35' && exit 1)",
     "preversion": "builder run npm:preversion",
@@ -25,8 +25,6 @@
     "builder": "^2.8.0",
     "builder-radium-component": "^1.0.1",
     "coveralls": "^2.11.8",
-    "lodash.isplainobject": "^4.0.3",
-    "operative": "^0.4.4",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "worker-loader": "^0.7.0"

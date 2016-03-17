@@ -2,7 +2,7 @@
 /* eslint-disable new-cap,no-magic-numbers */
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
-import AutoLayout, { View, Subview, AutoDOM, constrain } from "../src/index.js";
+import ConstraintLayout, { View, Subview, AutoDOM, constrain } from "../src/index.js";
 
 class Rectangle extends Component {
   static propTypes = {
@@ -34,7 +34,7 @@ const SubRectangle = Subview(Rectangle);
 class App extends Component {
   render() {
     return (
-      <AutoLayout>
+      <ConstraintLayout>
         <View
           name="main"
           container="div"
@@ -45,7 +45,7 @@ class App extends Component {
             name="autobot"
             intrinsicWidth={100}
             intrinsicHeight={100}
-            constraints = {[
+            constraints={[
               constrain().subview("autobot").centerX.to.equal.superview.centerX
             ]}
           >
@@ -57,11 +57,15 @@ class App extends Component {
             intrinsicWidth={20}
             intrinsicHeight={20}
             constraints={[
-              constrain().subview("rectangle").centerX.to.equal.superview.centerX
+              constrain().subview("rectangle").centerX.to.equal.superview.centerX,
+              constrain().subview("rectangle").left.to.equal.superview.left.minus(40),
+              constrain().subview("rectangle").right.to.equal.superview.right.plus(60),
+              constrain().subview("rectangle").top.to.equal.superview.top.plus(100),
+              constrain().subview("rectangle").bottom.to.equal.superview.bottom.plus(120)
             ]}
           />
         </View>
-      </AutoLayout>
+      </ConstraintLayout>
     );
   }
 }
