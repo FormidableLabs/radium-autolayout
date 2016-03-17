@@ -21,7 +21,7 @@ export type LayoutTransform = {
 
 export type LayoutTransformer = (layout: Layout) => LayoutTransform;
 
-const transformer = (
+const transformer = ( // eslint-disable-line max-params
   ComposedComponent: ReactClass,
   props: Props,
   layout: Layout,
@@ -30,12 +30,12 @@ const transformer = (
   const layoutProps = layoutTransformer(layout);
   const newProps = layoutProps.transformType === "style"
     ? {...props, style: layoutProps.props}
-    : {...props, ...layoutProps.props}
+    : {...props, ...layoutProps.props};
 
   return createElement(
     ComposedComponent, newProps, props.children
   );
-}
+};
 // The default DOM layout map.
 // Absolutely positions with style attributes.
 const defaultLayoutTransformer = (layout: Layout): Object => {
@@ -52,7 +52,8 @@ const defaultLayoutTransformer = (layout: Layout): Object => {
 
 export default (
   ComposedComponent: ReactClass,
-  layoutTransformer: LayoutTransformer = defaultLayoutTransformer
+  layoutTransformer: LayoutTransformer = // eslint-disable-line space-infix-ops
+    defaultLayoutTransformer
 ): ReactClass =>
 class extends Component {
   props: Props;
