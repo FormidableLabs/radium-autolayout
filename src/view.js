@@ -12,7 +12,8 @@ type Props = {
   children: ReactPropTypes.node,
   width: number,
   height: number,
-  spacing: Array<number>
+  spacing: Array<number>,
+  style: Object
 };
 
 type State = {
@@ -56,10 +57,19 @@ export default class View extends Component {
     client.registerView(name, size, spacing, () => {
       client.run("initializeSubviews", {
         viewName: name, layoutProps
-      }, (layout) => {
-        this.onLayout(layout);
-      });
+      }, (layout) => this.onLayout(layout));
     });
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { name: viewName, width, height } = nextProps;
+    const { width: oldWidth, height: oldHeight } = this.props;
+    if (width === oldWidth && height === oldHeight) {
+      return;
+    }
+    this.context.client.run("setSize", {
+      viewName, size: { width, height }
+    }, (layout) => this.onLayout(layout));
   }
 
   onLayout(subviews: Array<SubView>) {
@@ -71,9 +81,9 @@ export default class View extends Component {
   }
 
   render(): ?Element {
-    const { container, children, width, height } = this.props;
+    const { container, children, width, height, style } = this.props;
     const newProps = {
-      style: { width, height }
+      style: { width, height, ...style}
     };
     return createElement(container, newProps, children);
   }
