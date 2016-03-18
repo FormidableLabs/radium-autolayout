@@ -5,7 +5,8 @@ import React, { Component, PropTypes, createElement } from "react";
 
 export type Props = {
   name: string,
-  children: ?ReactPropTypes.node
+  children: ?ReactPropTypes.node,
+  style: ?Object
 };
 
 export type Transformer = (
@@ -15,8 +16,8 @@ export type Transformer = (
 ) => Element;
 
 export type LayoutTransform = {
-  transformType: string,
-  props: Object
+  props: Object,
+  style: Object
 };
 
 export type LayoutTransformer = (layout: Layout) => LayoutTransform;
@@ -28,9 +29,14 @@ const transformer = ( // eslint-disable-line max-params
   layoutTransformer: LayoutTransformer
 ): Element => {
   const layoutProps = layoutTransformer(layout);
-  const newProps = layoutProps.transformType === "style"
-    ? {...props, style: layoutProps.props}
-    : {...props, ...layoutProps.props};
+  const newProps = {
+    ...props,
+    ...layoutProps.props,
+    style: {
+      ...props.style,
+      ...layoutProps.style
+    }
+  };
 
   return createElement(
     ComposedComponent, newProps, props.children
@@ -40,8 +46,8 @@ const transformer = ( // eslint-disable-line max-params
 // Absolutely positions with style attributes.
 const defaultLayoutTransformer = (layout: Layout): Object => {
   return {
-    transformType: "style",
-    props: {
+    style: {
+      position: "absolute",
       width: layout.width,
       height: layout.height,
       top: layout.top,
