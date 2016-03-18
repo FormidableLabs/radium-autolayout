@@ -3,7 +3,7 @@ import type { Layout } from "./engine";
 import Subview from "./subview";
 
 const transformers = {
-  "rect": (layout: Layout): Object => {
+  rect: (layout: Layout): Object => {
     return {
       transformType: "props",
       props: {
@@ -14,7 +14,7 @@ const transformers = {
       }
     };
   },
-  "line": (layout: Layout): Object => {
+  line: (layout: Layout): Object => {
     return {
       transformType: "props",
       props: {
@@ -25,7 +25,7 @@ const transformers = {
       }
     };
   },
-  "text": (layout: Layout): Object => {
+  text: (layout: Layout): Object => {
     return {
       transformType: "props",
       props: {
@@ -34,7 +34,7 @@ const transformers = {
       }
     };
   },
-  "circle": (layout: Layout): Object => {
+  circle: (layout: Layout): Object => {
     return {
       transformType: "props",
       props: {
@@ -44,7 +44,7 @@ const transformers = {
       }
     };
   },
-  "ellipse": (layout: Layout): Object => {
+  ellipse: (layout: Layout): Object => {
     return {
       transformType: "props",
       props: {
