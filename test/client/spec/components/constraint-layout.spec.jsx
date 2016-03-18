@@ -1,4 +1,4 @@
-/* eslint-disable new-cap,no-magic-numbers */
+/* eslint-disable new-cap*/
 import React from "react";
 import ConstraintLayout, { View } from "src";
 import { mount } from "enzyme";
