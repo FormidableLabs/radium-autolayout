@@ -104,7 +104,7 @@ export default class Engine {
 
   addIntrinsics(args: WorkerArgs): ?{ [key: string]: Layout } {
     const { viewName } = args;
-    const subviewName = args.name || null;
+    const subviewName = args.subviewName || null;
     if (!subviewName) {
       return null;
     }

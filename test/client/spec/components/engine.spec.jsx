@@ -190,7 +190,7 @@ describe("Engine", () => {
 
     const subviews = engine.addIntrinsics({
       viewName: "test",
-      name: "testSubview",
+      subviewName: "testSubview",
       intrinsics: {
         intrinsicWidth: 50,
         intrinsicHeight: 20
@@ -202,4 +202,3 @@ describe("Engine", () => {
     expect(layout).to.have.property("height", 20);
   });
 });
-
