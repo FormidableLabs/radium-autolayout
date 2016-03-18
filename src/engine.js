@@ -153,7 +153,7 @@ export default class Engine {
       .reduce((prev, curr) => prev.concat(curr), []);
     this.addConstraints({ viewName, constraints });
 
-    for (const item of layoutProps) {
+    layoutProps.forEach((item) => {
       const {
         name: subviewName,
         intrinsicWidth,
@@ -164,7 +164,8 @@ export default class Engine {
           intrinsicWidth, intrinsicHeight
         }
       });
-    }
+    });
+
     return this.subviews({ viewName });
   }
 
