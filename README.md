@@ -150,7 +150,15 @@ There are more complex examples on the demo page. Check out the code in [app.jsx
 ### Installation
 - Install builder: `npm install -g builder`
 - Clone this repo
-- `npm install` and then `builder run hot` will load a webpack dev server at localhost:3000
+- `npm install` and then `./node_modules/.bin/builder run hot` will load a webpack dev server at localhost:3000.
+
+If you want to type `builder` instead of
+`./node_modules/.bin/builder`, please update your shell to include
+`./node_modules/.bin` in `PATH` like:
+
+```sh
+export PATH="${PATH}:./node_modules/.bin"
+```
 
 ## Caveats
 React Constraints uses an asynchronous layout engine running on a pool of WebWorkers. This prevents layout calculations from bogging down the main thread and allows the library to be a good citizen in any page/app. Therefore, browsers using this library must support WebWorkers.
