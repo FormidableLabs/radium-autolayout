@@ -160,6 +160,7 @@ Resolving and incrementally adding/removing constraints are cheap enough to run 
 ## Roadmap <a id="roadmap"></a>
 In order of priority:
 - Remove dependency on autolayout.js in favor of a simple wrapper around the Kiwi constraint solver.
+- Support SVG `path` elements in AutoSVG.
 - Create build tool to pre-calculate initial layouts.
 - Decide on a distribution strategy for the WebWorker code (preference on inlining).
 - Decide on an animation strategy (requires support for removing constraints).
