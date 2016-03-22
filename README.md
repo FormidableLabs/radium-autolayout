@@ -164,6 +164,11 @@ React Constraints uses an asynchronous layout engine running on a pool of WebWor
 
 Resolving and incrementally adding/removing constraints are cheap enough to run in 60fps for most cases. However, the initial layout calculations on first load are the most expensive, and you may notice a slight delay in layout (although this does not block the main thread). We're working on a build tool that will pre-calculate initial layouts and feed them into your components to prevent this.
 
+## Browser support
+This library's browser support aligns with React's browser support minus IE 8 and 9 (neither support Web Workers.) The library requires no polyfills for its supported environments.
+
+We _may_ investigate integrating a sham Web Worker for IE 9 support. 
+
 ## Roadmap <a id="roadmap"></a>
 In order of priority:
 - Remove dependency on autolayout.js in favor of a simple wrapper around the Kiwi constraint solver.
