@@ -6,6 +6,7 @@
  * - Browser tests: `http://localhost:3000/test/client/test.html`
  */
 /* globals window:false */
+require("babel-polyfill");
 const chai = require("chai");
 const sinonChai = require("sinon-chai");
 
