@@ -58,5 +58,6 @@ const transformers = {
 };
 
 export default Object.keys(transformers).reduce((acc, key) => {
-  return {...acc, [key]: Subview(key, transformers[key])};
+  acc[key] = Subview(key, transformers[key]);
+  return acc;
 }, {});

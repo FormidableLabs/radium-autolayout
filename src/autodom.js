@@ -25,8 +25,8 @@ export const whitelist = [
 export default Object.keys(DOMFactories)
   .filter((key) => whitelist.indexOf(key) !== -1)
   .reduce((acc, key) => {
-    const subview = transformers[key]
+    acc[key] = transformers[key]
       ? Subview(key, transformers[key])
       : Subview(key);
-    return {...acc, [key]: subview};
+    return acc;
   }, {});
