@@ -101,7 +101,7 @@ class Rectangle extends Component {
         height: this.props.layout.height || 0
       }}
       >
-        <p>It's demo time!</p>
+        <p>Demo time!</p>
       </div>
     );
   }
