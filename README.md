@@ -148,7 +148,6 @@ When using `AutoSVG` components, make sure to pass "g" instead of "div" to the `
 There are more complex examples on the demo page. Check out the code in [app.jsx](https://github.com/FormidableLabs/radium-constraints/blob/master/demo/app.jsx).
 
 ### Installation
-- Install builder: `npm install -g builder`
 - Clone this repo
 - `npm install` and then `./node_modules/.bin/builder run hot` will load a webpack dev server at localhost:3000.
 
