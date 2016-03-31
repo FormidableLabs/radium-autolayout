@@ -24,7 +24,7 @@ type Context = {
   client: LayoutClient
 };
 
-export default class View extends Component {
+export default class Superview extends Component {
   props: Props;
   state: State;
 
