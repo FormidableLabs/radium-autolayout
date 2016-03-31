@@ -19,22 +19,22 @@ import ConstraintLayout from "radium-constraints";
 </ConstraintLayout>
 ```
 
-Next, add a `<View>` component. A `<View>` is a collection of "subviews" whose layouts relate to each other and their parent "superview". A `<View>` typically encapsulates one large visual component, like a single chart.
+Next, add a `<Superview>` component. A `<Superview>` is a collection of "subviews" whose layouts relate to each other and their parent. A `<Superview>` typically encapsulates one large visual component, like a single chart.
 
-Views require the following props:
+Superviews require the following props:
 - `name`: for identification. We'll remove this requirement in future versions.
-- `container` which element the view should use as a container (i.e. `div` for DOM and `g` for SVG).
-- `width`: the initial width of the view.
-- `height`: the initial height of the view.
+- `container` which element the superview should use as a container (i.e. `div` for DOM and `g` for SVG).
+- `width`: the initial width of the superview.
+- `height`: the initial height of the superview.
 - `style` (optional) custom styles to apply to the container node.
 
-Here's how to set up a `<View>`:
+Here's how to set up a `<Superview>`:
 
 ```es6
-import ConstraintLayout, { View } from "radium-constraints";
+import ConstraintLayout, { Superview } from "radium-constraints";
 
 <ConstraintLayout>
-  <View
+  <Superview
     name="tutorial"
     container="div"
     width={400}
@@ -44,11 +44,11 @@ import ConstraintLayout, { View } from "radium-constraints";
     }}
   >
     ...subview components
-  </View>
+  </Superview>
 </ConstraintLayout>
 ```
 
-Finally, add subviews to your `<View>`! You can create subviews in two ways. The first, `AutoDOM` and `AutoSVG`, automatically map the bounding box of the subview to the appropriate DOM styles/SVG attributes. AutoDOM uses the bounding box to absolutely position the element. `AutoSVG` maps the bounding box to attributes like `x, y, x1, y1, cx, cy, r`, etc. on a per-element basis.
+Finally, add subviews to your `<Superview>`! You can create subviews in two ways. The first, `AutoDOM` and `AutoSVG`, automatically map the bounding box of the subview to the appropriate DOM styles/SVG attributes. AutoDOM uses the bounding box to absolutely position the element. `AutoSVG` maps the bounding box to attributes like `x, y, x1, y1, cx, cy, r`, etc. on a per-element basis.
 
 If you need more control over the usage of the bounding box in components, you can create a custom subview using the `<Subview>` higher-order component. `<Subview>` provides layout props (width, height, top, left, bottom, right) that you can map to DOM attributes or `style` props.
 
@@ -62,8 +62,7 @@ Building constraints uses a fluent DSL in the style of Chai assertions. Some con
 
 ```es6
 
-// These two constraints center the subview in the superview
-// (the superview being the subview's parent <View> component).
+// These two constraints center the subview in the <Superview>.
 constrain().subview("demo").centerX.to.equal.superview.centerX
 constrain().subview("demo").centerY.to.equal.superview.centerY
 
@@ -113,10 +112,10 @@ export default Subview(Rectangle);
 Here's how to use `AutoDOM` components:
 
 ```es6
-import ConstraintLayout, { View, AutoDOM } from "radium-constraints";
+import ConstraintLayout, { Superview, AutoDOM } from "radium-constraints";
 
 <ConstraintLayout>
-  <View
+  <Superview
     name="tutorial"
     container="div"
     width={400}
@@ -138,11 +137,11 @@ import ConstraintLayout, { View, AutoDOM } from "radium-constraints";
     >
       This is a subview
     </AutoDOM.div>
-  </View>
+  </Superview>
 </ConstraintLayout>
 ```
 
-When using `AutoSVG` components, make sure to pass "g" instead of "div" to the `<View>`'s `container` prop.
+When using `AutoSVG` components, make sure to pass "g" instead of "div" to the `<Superview>`'s `container` prop.
 
 ## Demo
 There are more complex examples on the demo page. Check out the code in [app.jsx](https://github.com/FormidableLabs/radium-constraints/blob/master/demo/app.jsx).
@@ -167,13 +166,12 @@ Resolving and incrementally adding/removing constraints are cheap enough to run 
 ## Browser support
 This library's browser support aligns with React's browser support minus IE 8 and 9 (neither support Web Workers.) The library requires no polyfills for its supported environments.
 
-We _may_ investigate integrating a sham Web Worker for IE 9 support. 
+We _may_ investigate integrating a sham Web Worker for IE 9 support.
 
 ## Roadmap <a id="roadmap"></a>
 In order of priority:
 - Remove dependency on autolayout.js in favor of a simple wrapper around the Kiwi constraint solver.
 - Support SVG `path` elements in AutoSVG.
 - Create build tool to pre-calculate initial layouts.
-- Decide on a distribution strategy for the WebWorker code (preference on inlining).
 - Decide on an animation strategy (requires support for removing constraints).
 - Allow for self-referential subviews in the constraint props array without using the subview string.

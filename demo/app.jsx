@@ -3,7 +3,7 @@
 /* eslint-disable new-cap,no-magic-numbers */
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import ConstraintLayout, { View, AutoDOM, constrain } from "../src/index.js";
+import ConstraintLayout, { Superview, AutoDOM, constrain } from "../src/index.js";
 
 type State = {
   windowWidth: ?number,
@@ -42,7 +42,7 @@ class App extends Component {
     };
   }
 
-  resizeView() {
+  resizeSuperview() {
     this.setState({
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight
@@ -53,7 +53,7 @@ class App extends Component {
     window.addEventListener(
       "resize", (event) => {
         window.requestAnimationFrame(() => {
-          this.resizeView(event);
+          this.resizeSuperview(event);
         });
       }
     );
@@ -62,7 +62,7 @@ class App extends Component {
   render() {
     return (
       <ConstraintLayout>
-        <View
+        <Superview
           name="main"
           container="div"
           width={this.state.windowWidth}
@@ -227,7 +227,7 @@ class App extends Component {
           >
             11
           </AutoDOM.p>
-        </View>
+        </Superview>
       </ConstraintLayout>
     );
   }

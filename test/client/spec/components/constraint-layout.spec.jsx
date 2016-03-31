@@ -1,13 +1,13 @@
 /* eslint-disable new-cap*/
 import React from "react";
-import ConstraintLayout, { View } from "src";
+import ConstraintLayout, { Superview } from "src";
 import { mount } from "enzyme";
 
 describe("ConstraintLayout component", () => {
   it("should instantiate a LayoutClient", () => {
     const result = mount(
       <ConstraintLayout>
-        <View
+        <Superview
           name="main"
           container="div"
           width={400}
@@ -23,11 +23,11 @@ describe("ConstraintLayout component", () => {
   });
 });
 
-describe("View component", () => {
+describe("Superview component", () => {
   it("should create a container from a tag name and dimensions", () => {
     const result = mount(
       <ConstraintLayout>
-        <View
+        <Superview
           name="main"
           container="div"
           width={400}
@@ -35,7 +35,7 @@ describe("View component", () => {
         />
       </ConstraintLayout>
     );
-    const view = result.find(View);
+    const view = result.find(Superview);
     const container = view.find("div");
     expect(container.length).to.equal(1);
     expect(container.node.style.width).to.equal("400px");
