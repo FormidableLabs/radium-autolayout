@@ -1,6 +1,6 @@
 {
   "name": "radium-constraints",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Constraint-based layout system for React components.",
   "main": "lib/index.js",
   "repository": {
