@@ -1,0 +1,3 @@
+{
+  "extends": "builder-radium-component/config/babel/.babelrc"
+}
