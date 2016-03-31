@@ -5,9 +5,14 @@ import type { WorkerArgs } from "./engine";
 import type { Proxyable } from "./worker-proxy";
 import WorkerProxy from "./worker-proxy";
 
-// $FlowIssue: obviously won't work on Webpack loaders
-const LayoutWorker: any = require("worker!./engine.js");
-
+const LayoutWorker = () => {
+  return new Worker(
+    URL.createObjectURL(new Blob(
+      [atob("babel-inline-worker!./engine.js")],
+      {type: "text/javascript"}
+    ))
+  );
+};
 const DEFAULT_THREAD_COUNT = 4;
 
 export default class LayoutClient {
@@ -17,8 +22,8 @@ export default class LayoutClient {
 
   constructor(
     threadCount: number,
-    ProxyClass: any = WorkerProxy,
-    WorkerClass: any = LayoutWorker
+    workerFactory: () => Worker = LayoutWorker,
+    ProxyClass: any = WorkerProxy
   ) {
     this.views = {};
     this.workers = [];
@@ -33,7 +38,7 @@ export default class LayoutClient {
 
     // Instantiate the workers and add listeners to each one
     while (workerCount--) {
-      const proxy: Proxyable = new ProxyClass(new WorkerClass());
+      const proxy: Proxyable = new ProxyClass(workerFactory());
       this.workers.push(proxy);
     }
   }
@@ -102,4 +107,3 @@ export default class LayoutClient {
     this.currentWorker = 0;
   }
 }
-
