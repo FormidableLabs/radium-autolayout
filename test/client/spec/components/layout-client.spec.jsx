@@ -7,6 +7,10 @@ class MockWorker {
   terminate() {}
 }
 
+const mockWorkerFactory = () => {
+  return new MockWorker();
+};
+
 class MockProxy {
   worker: Worker;
 
@@ -23,14 +27,14 @@ class MockProxy {
 
 describe("Layout client", () => {
   it("should initialize a views dict and the correct # of workers", () => {
-    const client = new LayoutClient(4, MockProxy, MockWorker);
+    const client = new LayoutClient(4, mockWorkerFactory, MockProxy);
     expect(client).to.have.property("views");
     const workers = client.workers;
     expect(workers.length).to.equal(4);
   });
 
   it("should register a view and cycle to the next worker", () => {
-    const client = new LayoutClient(4, MockProxy, MockWorker);
+    const client = new LayoutClient(4, mockWorkerFactory, MockProxy);
     const size = {
       width: 10,
       height: 5
@@ -45,7 +49,7 @@ describe("Layout client", () => {
   });
 
   it("should deregister a view", () => {
-    const client = new LayoutClient(4, MockProxy, MockWorker);
+    const client = new LayoutClient(4, mockWorkerFactory, MockProxy);
     const size = {
       width: 10,
       height: 5
@@ -57,7 +61,7 @@ describe("Layout client", () => {
   });
 
   it("should terminate all workers", () => {
-    const client = new LayoutClient(4, MockProxy, MockWorker);
+    const client = new LayoutClient(4, mockWorkerFactory, MockProxy);
     const size = {
       width: 10,
       height: 5
@@ -71,4 +75,3 @@ describe("Layout client", () => {
     expect(client.workers.length).to.equal(0);
   });
 });
-

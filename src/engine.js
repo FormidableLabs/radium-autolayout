@@ -2,7 +2,7 @@
 /* eslint-env worker */
 import type { SubView } from "autolayout";
 import type ConstraintBuilder from "./constraint-builder";
-import { View } from "autolayout";
+import View from "autolayout/lib/kiwi/View";
 
 export type Layout = {
   width: number,

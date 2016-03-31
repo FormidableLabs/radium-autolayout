@@ -1,3 +1,6 @@
 {
-  "extends": "./node_modules/builder-radium-component/config/babel/.babelrc"
+  "extends": "builder-radium-component/config/babel/.babelrc",
+  "plugins": [
+    "./plugins/lib/babel-plugin-inline-worker"
+  ]
 }
