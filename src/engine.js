@@ -33,13 +33,14 @@ export type WorkerArgs = {
 // message to the main thread with the method
 // name and result.
 const postCallback = (
+  viewName: string,
   callbackName: string,
   method: (args: WorkerArgs) => bool | Layout
 ) => {
   return (args: WorkerArgs) => {
     const result = method(args);
     postMessage({
-      method: callbackName, result
+      viewName, method: callbackName, result
     });
   };
 };
@@ -156,11 +157,13 @@ export default class Engine {
         intrinsicWidth,
         intrinsicHeight
       } = item;
-      this.addIntrinsics({
-        viewName, subviewName, intrinsics: {
-          intrinsicWidth, intrinsicHeight
-        }
-      });
+      if (subviewName && intrinsicWidth && intrinsicHeight) {
+        this.addIntrinsics({
+          viewName, subviewName, intrinsics: {
+            intrinsicWidth, intrinsicHeight
+          }
+        });
+      }
     });
 
     return this.subviews({ viewName });
@@ -204,6 +207,6 @@ onmessage = ({ data: message }) => {
   const { method, args } = message;
   // $FlowIssue: doesn't support dynamic lookup yet
   if (engine[method]) {
-    postCallback(method, engine[method].bind(engine))(args);
+    postCallback(args.viewName, method, engine[method].bind(engine))(args);
   }
 };

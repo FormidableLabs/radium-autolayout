@@ -14,18 +14,19 @@ export default class WorkerProxy {
     this.callbacks = {};
     this.worker.onmessage = ({ data: message }) => {
       const method = message.method || null;
-      if (method) {
-        const cb = this.callbacks[method];
+      const viewName = message.viewName || null;
+      if (method && viewName) {
+        const cb = this.callbacks[method + viewName];
         if (cb) {
           cb(message.result || null);
-          this.callbacks[method] = null;
+          this.callbacks[method + viewName] = null;
         }
       }
     };
   }
 
   run(method: string, args: Object, cb: (result: ?Cloneable) => void) {
-    this.callbacks[method] = cb;
+    this.callbacks[method + args.viewName] = cb;
     this.worker.postMessage({ method, args });
   }
 
