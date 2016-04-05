@@ -1,10 +1,12 @@
 // @flow
+/* eslint-disable new-cap */
 import type { SubView } from "autolayout";
 import type { Element } from "react";
 import type LayoutClient from "./layout-client";
 
 import { Component, PropTypes, createElement } from "react";
 import extractLayoutProps from "./extract-layout-props";
+import UUID from "./uuid";
 
 type Props = {
   name: string,
@@ -24,7 +26,7 @@ type Context = {
   client: LayoutClient
 };
 
-export default class Superview extends Component {
+export default UUID(class Superview extends Component {
   props: Props;
   state: State;
 
@@ -87,4 +89,4 @@ export default class Superview extends Component {
     };
     return createElement(container, newProps, children);
   }
-}
+});
