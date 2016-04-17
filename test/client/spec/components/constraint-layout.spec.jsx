@@ -62,9 +62,9 @@ describe("Superview component", () => {
             intrinsicWidth={100}
             intrinsicHeight={100}
             constraints={[
-              constrain().subview(subviewName).centerX
+              constrain.subview(subviewName).centerX
                 .to.equal.superview.centerX,
-              constrain().subview(subviewName).centerY
+              constrain.subview(subviewName).centerY
                 .to.equal.superview.centerY
             ]}
           >

@@ -117,7 +117,7 @@ describe("Engine", () => {
         intrinsicWidth={200}
         intrinsicHeight={100}
         constraints={[
-          constrain().subview("testSubview").centerX
+          constrain.subview("testSubview").centerX
             .to.equal.superview.centerX
         ]}
       >
@@ -155,7 +155,7 @@ describe("Engine", () => {
     const subviews = engine.addConstraints({
       viewName: "test",
       constraints: [
-        constrain().subview("testSubview").centerX
+        constrain.subview("testSubview").centerX
           .to.equal.superview.centerX.build()
       ]
     });
@@ -183,7 +183,7 @@ describe("Engine", () => {
     engine.addConstraints({
       viewName: "test",
       constraints: [
-        constrain().subview("testSubview").centerX
+        constrain.subview("testSubview").centerX
           .to.equal.superview.centerX.build()
       ]
     });
