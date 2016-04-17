@@ -77,8 +77,8 @@ class App extends Component {
             intrinsicWidth={300}
             intrinsicHeight={45}
             constraints={[
-              constrain().subview("note").centerX.to.equal.superview.centerX,
-              constrain().subview("note").centerY.to.equal.superview.centerY
+              constrain.subview("note").centerX.to.equal.superview.centerX,
+              constrain.subview("note").centerY.to.equal.superview.centerY
             ]}
           >
             Worst clock ever! Resize the window for full effect.
@@ -89,8 +89,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("12").centerX.to.equal.superview.centerX,
-              constrain().subview("12").top.to.equal.superview.top
+              constrain.subview("12").centerX.to.equal.superview.centerX,
+              constrain.subview("12").top.to.equal.superview.top
             ]}
           >
             12
@@ -101,8 +101,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("1").centerX.to.equal.superview.centerX.times(1 + 1 / 3),
-              constrain().subview("1").centerY.to.equal.superview.height.times(1 / 6)
+              constrain.subview("1").centerX.to.equal.superview.centerX.times(1 + 1 / 3),
+              constrain.subview("1").centerY.to.equal.superview.height.times(1 / 6)
             ]}
           >
             1
@@ -113,8 +113,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("2").centerX.to.equal.superview.centerX.times(1 + 2 / 3),
-              constrain().subview("2").centerY.to.equal.superview.height.times(1 / 3)
+              constrain.subview("2").centerX.to.equal.superview.centerX.times(1 + 2 / 3),
+              constrain.subview("2").centerY.to.equal.superview.height.times(1 / 3)
             ]}
           >
             2
@@ -125,8 +125,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("3").right.to.equal.superview.right,
-              constrain().subview("3").centerY.to.equal.superview.centerY
+              constrain.subview("3").right.to.equal.superview.right,
+              constrain.subview("3").centerY.to.equal.superview.centerY
             ]}
           >
             3
@@ -137,8 +137,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("4").centerX.to.equal.superview.centerX.times(1 + 2 / 3),
-              constrain().subview("4").centerY.to.equal.superview.height.times(2 / 3)
+              constrain.subview("4").centerX.to.equal.superview.centerX.times(1 + 2 / 3),
+              constrain.subview("4").centerY.to.equal.superview.height.times(2 / 3)
             ]}
           >
             4
@@ -149,8 +149,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("5").centerX.to.equal.superview.centerX.times(1 + 1 / 3),
-              constrain().subview("5").centerY.to.equal.superview.height.times(5 / 6)
+              constrain.subview("5").centerX.to.equal.superview.centerX.times(1 + 1 / 3),
+              constrain.subview("5").centerY.to.equal.superview.height.times(5 / 6)
             ]}
           >
             5
@@ -161,8 +161,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("6").bottom.to.equal.superview.bottom,
-              constrain().subview("6").centerX.to.equal.superview.centerX
+              constrain.subview("6").bottom.to.equal.superview.bottom,
+              constrain.subview("6").centerX.to.equal.superview.centerX
             ]}
           >
             6
@@ -173,8 +173,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("7").centerX.to.equal.superview.centerX.times(2 / 3),
-              constrain().subview("7").centerY.to.equal.superview.height.times(5 / 6)
+              constrain.subview("7").centerX.to.equal.superview.centerX.times(2 / 3),
+              constrain.subview("7").centerY.to.equal.superview.height.times(5 / 6)
             ]}
           >
             7
@@ -185,8 +185,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("8").centerX.to.equal.superview.centerX.times(1 / 3),
-              constrain().subview("8").centerY.to.equal.superview.height.times(2 / 3)
+              constrain.subview("8").centerX.to.equal.superview.centerX.times(1 / 3),
+              constrain.subview("8").centerY.to.equal.superview.height.times(2 / 3)
             ]}
           >
             8
@@ -197,8 +197,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("9").centerY.to.equal.superview.centerY,
-              constrain().subview("9").left.to.equal.superview.left
+              constrain.subview("9").centerY.to.equal.superview.centerY,
+              constrain.subview("9").left.to.equal.superview.left
             ]}
           >
             9
@@ -209,8 +209,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("10").centerX.to.equal.superview.centerX.times(2 / 3),
-              constrain().subview("10").centerY.to.equal.superview.height.times(1 / 6)
+              constrain.subview("10").centerX.to.equal.superview.centerX.times(2 / 3),
+              constrain.subview("10").centerY.to.equal.superview.height.times(1 / 6)
             ]}
           >
             10
@@ -221,8 +221,8 @@ class App extends Component {
             intrinsicWidth={50}
             intrinsicHeight={50}
             constraints={[
-              constrain().subview("11").centerX.to.equal.superview.centerX.times(1 / 3),
-              constrain().subview("11").centerY.to.equal.superview.height.times(1 / 3)
+              constrain.subview("11").centerX.to.equal.superview.centerX.times(1 / 3),
+              constrain.subview("11").centerY.to.equal.superview.height.times(1 / 3)
             ]}
           >
             11

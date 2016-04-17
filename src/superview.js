@@ -5,8 +5,8 @@ import type { Element } from "react";
 import type LayoutClient from "./layout-client";
 
 import { Component, PropTypes, createElement } from "react";
-import extractLayoutProps from "./extract-layout-props";
 import UUID from "./uuid";
+import extractLayoutProps from "./extract-layout-props";
 
 type Props = {
   name: string,
@@ -26,7 +26,7 @@ type Context = {
   client: LayoutClient
 };
 
-export default UUID(class Superview extends Component {
+class Superview extends Component {
   props: Props;
   state: State;
 
@@ -69,6 +69,7 @@ export default UUID(class Superview extends Component {
     if (width === oldWidth && height === oldHeight) {
       return;
     }
+
     this.context.client.run("setSize", {
       viewName, size: { width, height }
     }, (layout) => this.onLayout(layout));
@@ -89,4 +90,6 @@ export default UUID(class Superview extends Component {
     };
     return createElement(container, newProps, children);
   }
-});
+}
+
+export default UUID(Superview);

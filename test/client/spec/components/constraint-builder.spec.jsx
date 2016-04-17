@@ -3,7 +3,7 @@ import { constrain } from "src";
 
 describe("Constraint builder", () => {
   it("should create a simple subview -> superview equality", () => {
-    const constraint = constrain().subview("test").width
+    const constraint = constrain.subview("test").width
       .to.equal.superview.width.build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "width");
@@ -13,7 +13,7 @@ describe("Constraint builder", () => {
   });
 
   it("should create a simple subview -> subview equality", () => {
-    const constraint = constrain().subview("test").width
+    const constraint = constrain.subview("test").width
       .to.equal.subview("otherTest").width.build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "width");
@@ -23,7 +23,7 @@ describe("Constraint builder", () => {
   });
 
   it("should create a simple subview -> superview inequality", () => {
-    const constraint = constrain().subview("test").height
+    const constraint = constrain.subview("test").height
       .to.be.lessThanOrEqualTo.superview.height.build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "height");
@@ -33,7 +33,7 @@ describe("Constraint builder", () => {
   });
 
   it("should create a simple subview -> subview inequality", () => {
-    const constraint = constrain().subview("test").height
+    const constraint = constrain.subview("test").height
       .to.be.greaterThanOrEqualTo.subview("otherTest").height.build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "height");
@@ -50,7 +50,7 @@ describe("Constraint builder", () => {
     ];
 
     for (const attribute of supportedAttributes) {
-      const constraint = constrain().subview("test")[attribute]
+      const constraint = constrain.subview("test")[attribute]
         .to.equal.superview[attribute].build();
 
       expect(constraint).to.have.deep.property("view1", "test");
@@ -62,7 +62,7 @@ describe("Constraint builder", () => {
   });
 
   it("should constrain a subview to a constant", () => {
-    const constraint = constrain().subview("test").left
+    const constraint = constrain.subview("test").left
       .to.equal.constant(10).build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "left");
@@ -72,7 +72,7 @@ describe("Constraint builder", () => {
   });
 
   it("should constrain a superview to a constant", () => {
-    const constraint = constrain().superview.left
+    const constraint = constrain.superview.left
       .to.equal.constant(20).build();
     expect(constraint).to.have.deep.property("view1", null);
     expect(constraint).to.have.deep.property("attr1", "left");
@@ -82,7 +82,7 @@ describe("Constraint builder", () => {
   });
 
   it("should constrain a subview attribute to a superview attribute plus a constant", () => {
-    const constraint = constrain().subview("test").left
+    const constraint = constrain.subview("test").left
       .to.equal.superview.left.plus(30).build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "left");
@@ -93,7 +93,7 @@ describe("Constraint builder", () => {
   });
 
   it("should constrain a subview attribute to a superview attribute minus a constant", () => {
-    const constraint = constrain().subview("test").left
+    const constraint = constrain.subview("test").left
       .to.equal.superview.left.minus(30).build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "left");
@@ -104,7 +104,7 @@ describe("Constraint builder", () => {
   });
 
   it("should constrain a subview attribute to a superview attribute with a multiplier", () => {
-    const constraint = constrain().subview("test").left
+    const constraint = constrain.subview("test").left
       .to.equal.superview.left.times(2).build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "left");
@@ -115,7 +115,7 @@ describe("Constraint builder", () => {
   });
 
   it("should constrain a subview attribute to a superview attribute with a priority", () => {
-    const constraint = constrain().subview("test").left
+    const constraint = constrain.subview("test").left
       .to.equal.superview.left.withPriority(250).build();
     expect(constraint).to.have.deep.property("view1", "test");
     expect(constraint).to.have.deep.property("attr1", "left");
