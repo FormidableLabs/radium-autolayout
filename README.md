@@ -63,17 +63,17 @@ Building constraints uses a fluent DSL in the style of Chai assertions. Some con
 ```es6
 
 // These two constraints center the subview in the <Superview>.
-constrain().subview("demo").centerX.to.equal.superview.centerX
-constrain().subview("demo").centerY.to.equal.superview.centerY
+constrain.subview("demo").centerX.to.equal.superview.centerX
+constrain.subview("demo").centerY.to.equal.superview.centerY
 
 // This prevents this subview from overlapping with
 // another subview named "other".
-constrain().subview("demo").left
+constrain.subview("demo").left
   .to.be.greaterThanOrEqualTo.subview("other").right
 
 // This prevents this subview from overflowing
 // the superview's right edge.
-constrain().subview("demo").right
+constrain.subview("demo").right
   .to.be.lessThanOrEqualTo.superview.right
 ```
 
@@ -129,9 +129,9 @@ import ConstraintLayout, { Superview, AutoDOM } from "radium-constraints";
       intrinsicWidth={50}
       intrinsicHeight={50}
       constraints={[
-        constrain().subview("tutorialSubview").centerX
+        constrain.subview("tutorialSubview").centerX
           .to.equal.superview.centerX,
-        constrain().subview("tutorialSubview").centerY
+        constrain.subview("tutorialSubview").centerY
           .to.equal.superview.centerY
       ]}
     >
