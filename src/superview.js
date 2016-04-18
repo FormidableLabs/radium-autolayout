@@ -3,6 +3,7 @@
 import type { SubView } from "autolayout";
 import type { Element } from "react";
 import type LayoutClient from "./layout-client";
+import type ConstraintBuilder from "./constraint-builder";
 
 import { Component, PropTypes, createElement } from "react";
 import UUID from "./uuid";
@@ -10,6 +11,7 @@ import extractLayoutProps from "./extract-layout-props";
 
 type Props = {
   name: string,
+  constraints: ?Array<ConstraintBuilder>,
   container: ReactClass,
   children: ReactPropTypes.node,
   width: number,
@@ -48,13 +50,16 @@ class Superview extends Component {
 
   componentDidMount() {
     const {
-      container, children, name, width, height, spacing
+      constraints, container, children, name, width, height, spacing
     } = this.props;
     const size = { width, height };
     const { client } = this.context;
 
     const element = createElement(container, null, children);
-    const layoutProps = extractLayoutProps(element);
+    const layoutProps = extractLayoutProps(element)
+      .concat(constraints ? {
+        constraints: constraints.map((c) => c.build())
+      } : []);
 
     client.registerView(name, size, spacing, () => {
       client.run("initializeSubviews", {

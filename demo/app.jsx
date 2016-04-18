@@ -70,16 +70,16 @@ class App extends Component {
           style={{
             background: colors.shade1
           }}
+          constraints={[
+            constrain.subview("note").centerX.to.equal.superview.centerX,
+            constrain.subview("note").centerY.to.equal.superview.centerY
+          ]}
         >
           <AutoDOM.p
             name="note"
             style={{...styles.box, fontSize: "16px", border: 0}}
             intrinsicWidth={300}
             intrinsicHeight={45}
-            constraints={[
-              constrain.subview("note").centerX.to.equal.superview.centerX,
-              constrain.subview("note").centerY.to.equal.superview.centerY
-            ]}
           >
             Worst clock ever! Resize the window for full effect.
           </AutoDOM.p>
