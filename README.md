@@ -106,7 +106,7 @@ class Rectangle extends Component {
   }
 }
 
-export default Subview(Rectangle);
+export default Subview()(Rectangle);
 ```
 
 Here's how to use `AutoDOM` components:
@@ -143,6 +143,59 @@ import ConstraintLayout, { Superview, AutoDOM } from "radium-constraints";
 
 When using `AutoSVG` components, make sure to pass "g" instead of "div" to the `<Superview>`'s `container` prop.
 
+## Animation
+You can add automatic layout animation to any `Subview` or `AutoSVG`/`AutoDOM` components! The animation system works with both `<Motion>` from `react-motion` and `<VictoryAnimation>` from `victory-core`. To create Victory-animated versions of `AutoDOM` components, for example, you'd do the following:
+
+```es6
+import { animateDOM } from "radium-constraints";
+import { VictoryAnimation } from "victory-core";
+
+const VictoryAnimationAutoDOM = animateDOM({
+  animatorClass: VictoryAnimation,
+  animatorProps: (layout) => ({
+    data: {
+      width: layout.width,
+      height: layout.height,
+      top: layout.top,
+      right: layout.right,
+      bottom: layout.bottom,
+      left: layout.left
+    }
+  })
+});
+
+// Later, in render()
+<VictoryAnimationAutoDOM.p
+  name="victory-animation-note"
+  style={{...styles.box, fontSize: "16px", border: 0}}
+  intrinsicWidth={300}
+  intrinsicHeight={45}
+  constraints={this.state.dynamicConstraints}
+>
+  This is a subview animated by VictoryAnimation!!!!!!
+</VictoryAnimationAutoDOM.p>
+```
+
+When different constraints enter either the top-level or component-level `constraints` prop, the new animated component automatically tweens between the previous and newly calculated layout, diffing/removing/adding constraints behind the scenes.
+
+If you're using the `Subview` higher-order component, you can pass an object with `animatorClass` and `animatorProps` to the first curried argument of `Subview` like so:
+
+```es6
+export default Subview({
+  animatorClass: VictoryAnimation,
+  animatorProps: (layout) => ({
+    data: {
+      width: layout.width,
+      height: layout.height,
+      top: layout.top,
+      right: layout.right,
+      bottom: layout.bottom,
+      left: layout.left
+    }
+  })
+})(SomeCustomComponent);
+```
+
 ## Demo
 There are more complex examples on the demo page. Check out the code in [app.jsx](https://github.com/FormidableLabs/radium-constraints/blob/master/demo/app.jsx).
 
@@ -164,14 +217,11 @@ React Constraints uses an asynchronous layout engine running on a pool of WebWor
 Resolving and incrementally adding/removing constraints are cheap enough to run in 60fps for most cases. However, the initial layout calculations on first load are the most expensive, and you may notice a slight delay in layout (although this does not block the main thread). We're working on a build tool that will pre-calculate initial layouts and feed them into your components to prevent this.
 
 ## Browser support
-This library's browser support aligns with React's browser support minus IE 8 and 9 (neither support Web Workers.) The library requires no polyfills for its supported environments.
-
-We _may_ investigate integrating a sham Web Worker for IE 9 support.
+This library's browser support aligns with React's browser support minus IE 8 and 9 (neither support Web Workers). The library requires a Promise polyfill for non-ES6 environments.
 
 ## Roadmap <a id="roadmap"></a>
 In order of priority:
-- Remove dependency on autolayout.js in favor of a simple wrapper around the Kiwi constraint solver.
-- Support SVG `path` elements in AutoSVG.
 - Create build tool to pre-calculate initial layouts.
-- Decide on an animation strategy (requires support for removing constraints).
+- Support SVG `path` elements in AutoSVG.
+- Remove dependency on autolayout.js in favor of a simple wrapper around the Kiwi constraint solver.
 - Allow for self-referential subviews in the constraint props array without using the subview string.
