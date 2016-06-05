@@ -27,7 +27,7 @@ export type WorkerArgs = {
     intrinsicHeight: number
   },
   constraints?: Array<ConstraintBuilder>
-}
+};
 
 // Decorates engine methods to post a "callback"
 // message to the main thread with the method
@@ -132,10 +132,24 @@ export default class Engine {
       return null;
     }
     const constraints = args.constraints || null;
-    if (!constraints) {
+    if (!constraints || !constraints.length) {
       return null;
     }
     view.addConstraints(constraints);
+    return this.subviews({ viewName });
+  }
+
+  removeConstraints(args: WorkerArgs): ?{ [key: string]: Layout } {
+    const { viewName } = args;
+    const view = this.views[viewName];
+    if (!view) {
+      return null;
+    }
+    const constraints = args.constraints || null;
+    if (!constraints || !constraints.length) {
+      return null;
+    }
+    view.removeConstraints(constraints);
     return this.subviews({ viewName });
   }
 
