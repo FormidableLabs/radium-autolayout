@@ -42,6 +42,7 @@ const transformer = ( // eslint-disable-line max-params
     ComposedComponent, newProps, props.children
   );
 };
+
 // The default DOM layout map.
 // Absolutely positions with style attributes.
 const defaultLayoutTransformer = (layout: Layout): Object => {
@@ -56,53 +57,74 @@ const defaultLayoutTransformer = (layout: Layout): Object => {
   };
 };
 
-export default (
-  ComposedComponent: ReactClass,
-  layoutTransformer: LayoutTransformer = // eslint-disable-line space-infix-ops
-    defaultLayoutTransformer
-): ReactClass =>
-class extends Component {
-  props: Props;
+type SubviewArgs = {
+  animatorClass?: ReactClass,
+  animatorProps?: (layout: Layout) => Object,
+  layoutTransformer?: LayoutTransformer
+};
 
-  static contextTypes = {
-    subviews: PropTypes.object
-  };
+export default (args: SubviewArgs = {}): // eslint-disable-line space-infix-ops
+(ComposedComponent: ReactClass) => ReactClass => {
+  const {
+    animatorClass: Animator,
+    animatorProps,
+    layoutTransformer
+  } = args;
 
-  render(): ?Element {
-    const zeroLayout = {
-      width: 0,
-      height: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0
+  return (ComposedComponent: ReactClass): ReactClass =>
+    class extends Component {
+      props: Props;
+
+      static contextTypes = {
+        subviews: PropTypes.object
+      };
+
+      createSubviewElement(layout: Layout) {
+        // Is this an AutoDOM component?
+        if (typeof ComposedComponent === "string") {
+          return transformer(
+            ComposedComponent,
+            this.props,
+            layout,
+            layoutTransformer || defaultLayoutTransformer
+          );
+        }
+
+        // If not, pass the layout props to the enhanced component
+        return (
+          <ComposedComponent
+            {...this.props}
+            layout={layout}
+          />
+        );
+      }
+
+      render(): ?Element {
+        const zeroLayout = {
+          width: 0,
+          height: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0
+        };
+
+        const { name } = this.props;
+        const { subviews } = this.context;
+        const layout =
+          subviews &&
+          name &&
+          subviews[name] &&
+          subviews[name].layout ||
+          zeroLayout;
+
+        return Animator && animatorProps ? (
+          <Animator {...animatorProps(layout)}>
+            {(interpolatedLayout) =>
+              this.createSubviewElement(interpolatedLayout)
+            }
+          </Animator>
+        ) : this.createSubviewElement(layout);
+      }
     };
-
-    const { name } = this.props;
-    const { subviews } = this.context;
-    const layout = subviews &&
-      name &&
-      subviews[name] &&
-      subviews[name].layout
-        ? subviews[name].layout
-        : zeroLayout;
-
-    // Is this an AutoDOM component?
-    if (typeof ComposedComponent === "string") {
-      return transformer(
-        ComposedComponent,
-        this.props,
-        layout,
-        layoutTransformer
-      );
-    }
-
-    // If not, pass the layout props to the wrapped component
-    return (
-      <ComposedComponent
-        {...this.props}
-        layout={layout}
-      />
-    );
-  }
 };

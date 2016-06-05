@@ -57,7 +57,18 @@ const transformers = {
   }
 };
 
-export default Object.keys(transformers).reduce((acc, key) => {
-  acc[key] = Subview(key, transformers[key]);
+export const AutoSVG = Object.keys(transformers).reduce((acc, key) => {
+  acc[key] = Subview({
+    layoutTransformer: transformers[key]
+  })(key);
   return acc;
 }, {});
+
+export const animateSVG = (args: AnimatedDOMArgs) =>
+  Object.keys(transformers).reduce((acc, key) => {
+    acc[key] = Subview({
+      ...args,
+      layoutTransformer: transformers[key]
+    })(key);
+    return acc;
+  }, {});

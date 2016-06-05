@@ -167,7 +167,43 @@ describe("Engine", () => {
     expect(layout).to.have.property("top");
     expect(layout).to.have.property("right");
     expect(layout).to.have.property("bottom");
-    expect(layout).to.have.property("left");
+    expect(layout).to.have.property("left", 100);
+  });
+
+  it("should remove constraints from the view", () => {
+    const engine = new Engine();
+    engine.registerView({
+      viewName: "test",
+      size: {
+        width: 200,
+        height: 150
+      }
+    });
+
+    const subviews = engine.addConstraints({
+      viewName: "test",
+      constraints: [
+        constrain.subview("testSubview").centerX
+          .to.equal.superview.centerX.build()
+      ]
+    });
+
+    const { layout } = subviews.testSubview;
+
+    expect(layout).to.have.property("left", 100);
+
+    const subviewsWithoutConstraints = engine.removeConstraints({
+      viewName: "test",
+      constraints: [
+        constrain.subview("testSubview").centerX
+          .to.equal.superview.centerX.build()
+      ]
+    });
+
+    const { layout: layoutWithoutConstraints } =
+      subviewsWithoutConstraints.testSubview;
+
+    expect(layoutWithoutConstraints).to.have.property("left", 0);
   });
 
   it("should add intrinsic width and height to a subview", () => {
