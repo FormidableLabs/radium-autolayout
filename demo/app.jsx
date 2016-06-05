@@ -1,14 +1,54 @@
 // @flow
 /* eslint-env browser */
 /* eslint-disable new-cap,no-magic-numbers */
+import type ConstraintBuilder from "../src/constraint-builder";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import ConstraintLayout, { Superview, AutoDOM, constrain } from "../src/index.js";
+import ConstraintLayout, {
+  Superview,
+  AutoDOM,
+  animateDOM,
+  constrain
+} from "../src";
+
+// Animators
+import { Motion, spring, presets } from "react-motion";
+import { VictoryAnimation } from "victory-core";
 
 type State = {
   windowWidth: ?number,
-  windowHeight: ?number
-}
+  windowHeight: ?number,
+  dynamicConstraints: Array<ConstraintBuilder>,
+  activeConstraints: number
+};
+
+const MotionAutoDOM = animateDOM({
+  animatorClass: Motion,
+  animatorProps: (layout) => ({
+    style: {
+      width: spring(layout.width, presets.wobbly),
+      height: spring(layout.height, presets.wobbly),
+      top: spring(layout.top, presets.wobbly),
+      right: spring(layout.right, presets.wobbly),
+      bottom: spring(layout.bottom, presets.wobbly),
+      left: spring(layout.left, presets.wobbly)
+    }
+  })
+});
+
+const VictoryAnimationAutoDOM = animateDOM({
+  animatorClass: VictoryAnimation,
+  animatorProps: (layout) => ({
+    data: {
+      width: layout.width,
+      height: layout.height,
+      top: layout.top,
+      right: layout.right,
+      bottom: layout.bottom,
+      left: layout.left
+    }
+  })
+});
 
 const colors = {
   formidared: "#FF4136",
@@ -31,6 +71,49 @@ const styles = {
   }
 };
 
+const dynamicConstraintsQueue = [
+  [
+    constrain.subview("react-motion-note").centerX
+      .to.equal.superview.centerX.times(0.5),
+    constrain.subview("react-motion-note").centerY
+      .to.equal.superview.centerY,
+    constrain.subview("victory-animation-note").centerX
+      .to.equal.superview.centerX.times(1.5),
+    constrain.subview("victory-animation-note").centerY
+      .to.equal.superview.centerY
+  ],
+  [
+    constrain.subview("react-motion-note").centerX
+      .to.equal.superview.centerX,
+    constrain.subview("react-motion-note").centerY
+      .to.equal.superview.centerY.times(0.5),
+    constrain.subview("victory-animation-note").centerX
+      .to.equal.superview.centerX,
+    constrain.subview("victory-animation-note").centerY
+      .to.equal.superview.centerY.times(1.5)
+  ],
+  [
+    constrain.subview("react-motion-note").centerX
+      .to.equal.superview.centerX.times(1.5),
+    constrain.subview("react-motion-note").centerY
+      .to.equal.superview.centerY,
+    constrain.subview("victory-animation-note").centerX
+      .to.equal.superview.centerX.times(0.5),
+    constrain.subview("victory-animation-note").centerY
+      .to.equal.superview.centerY
+  ],
+  [
+    constrain.subview("react-motion-note").centerX
+      .to.equal.superview.centerX,
+    constrain.subview("react-motion-note").centerY
+      .to.equal.superview.centerY.times(1.5),
+    constrain.subview("victory-animation-note").centerX
+      .to.equal.superview.centerX,
+    constrain.subview("victory-animation-note").centerY
+      .to.equal.superview.centerY.times(0.5)
+  ]
+];
+
 class App extends Component {
   state: State;
 
@@ -38,7 +121,9 @@ class App extends Component {
     super(props);
     this.state = {
       windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight
+      windowHeight: window.innerHeight,
+      activeConstraints: 0,
+      dynamicConstraints: dynamicConstraintsQueue[0]
     };
   }
 
@@ -57,6 +142,22 @@ class App extends Component {
         });
       }
     );
+
+    setInterval(() => {
+      const nextActive =
+        this.state.activeConstraints !== dynamicConstraintsQueue.length - 1
+          ? this.state.activeConstraints + 1 : 0;
+
+      // console.log(nextActive);
+
+      const nextConstraints = dynamicConstraintsQueue[nextActive];
+
+      // console.log(nextConstraints);
+      this.setState({ // eslint-disable-line react/no-did-mount-set-state
+        activeConstraints: nextActive,
+        dynamicConstraints: nextConstraints
+      });
+    }, 2000);
   }
 
   render() {
@@ -70,19 +171,24 @@ class App extends Component {
           style={{
             background: colors.shade1
           }}
-          constraints={[
-            constrain.subview("note").centerX.to.equal.superview.centerX,
-            constrain.subview("note").centerY.to.equal.superview.centerY
-          ]}
+          constraints={this.state.dynamicConstraints}
         >
-          <AutoDOM.p
-            name="note"
+          <MotionAutoDOM.p
+            name="react-motion-note"
             style={{...styles.box, fontSize: "16px", border: 0}}
             intrinsicWidth={300}
             intrinsicHeight={45}
           >
-            Worst clock ever! Resize the window for full effect.
-          </AutoDOM.p>
+            This is a subview animated by React Motion!!!!!!!!!!
+          </MotionAutoDOM.p>
+          <VictoryAnimationAutoDOM.p
+            name="victory-animation-note"
+            style={{...styles.box, fontSize: "16px", border: 0}}
+            intrinsicWidth={300}
+            intrinsicHeight={45}
+          >
+            This is a subview animated by VictoryAnimation!!!!!!
+          </VictoryAnimationAutoDOM.p>
           <AutoDOM.p
             name="12"
             style={styles.box}
