@@ -162,4 +162,4 @@ class ConstraintBuilder {
   }
 }
 
-export default ((): ConstraintBuilder => new ConstraintBuilder())();
+export default new ConstraintBuilder();
