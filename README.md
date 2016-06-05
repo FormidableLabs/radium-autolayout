@@ -225,3 +225,47 @@ In order of priority:
 - Support SVG `path` elements in AutoSVG.
 - Remove dependency on autolayout.js in favor of a simple wrapper around the Kiwi constraint solver.
 - Allow for self-referential subviews in the constraint props array without using the subview string.
+
+## Constraint Builder API
+
+### `constrain`
+Begins a constraint builder chain.
+
+### `subview(name)`
+Chooses a subview by name to pick attributes from.
+
+### `superview`
+Chooses the superview to pick attributes from.
+
+### `to` and `be`
+No-op methods. Use with `lessThanOrEqualTo` and `greaterThanOrEqualTo` for legibility.
+
+### `equal`
+Declare that the subview or superview attribute on the left will equal the subview or superview attribute on the right.
+
+### `lessThanOrEqualTo` and `greaterThanOrEqualTo`
+Declare that the subview or superview attribute on the left will be greater than/less than or equal to the subview or superview attribute on the right.
+
+### `width`, `height`, `top`, `left`, `bottom`, `right`, `centerX`, `centerY`
+The constrainable attributes of a subview or superview. Call these methods on `superview` or `subview(name)` to complete one side of a constraint relationship.
+
+### `constant`
+Declare that the subview or superview attribute on the left will equal a constant number (no relation to another subview/superview).
+
+### `plus`, `minus`, `times`
+Modifies an attribute by a constant. Call these methods on attributes of `superview` or `subview`, like `superview.left.plus(10)`.
+
+### `withPriority(priority)`
+Declare the priority of this constraint. Accepts 1000, 750, and 250 as values. Use at the end of the entire chain.
+
+### Examples
+```es6
+constrain.subview("demo").bottom
+  .to.equal.superview.top.plus(10)
+  .withPriority(1000);
+  
+constrain.subview("demo").bottom.constant(20);
+
+constrain.subview("demo").right
+  .to.be.lessThanOrEqualTo.superview.right
+```
