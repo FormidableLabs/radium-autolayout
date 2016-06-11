@@ -73,17 +73,17 @@ class Superview extends Component {
     const { name: viewName, width, height } = nextProps;
     const { width: oldWidth, height: oldHeight } = this.props;
 
-    const hasNewSize = width === oldWidth && height === oldHeight;
-    const hasNewConstraints = isEqual(
+    const sameSize = width === oldWidth && height === oldHeight;
+    const sameConstraints = isEqual(
       this.props.constraints,
       nextProps.constraints
     );
 
-    if (!hasNewSize && !hasNewConstraints) {
+    if (sameSize && sameConstraints) {
       return;
     }
 
-    const onlyHasNewSize = hasNewSize && !hasNewConstraints;
+    const onlyHasNewSize = !sameSize && sameConstraints;
 
     const resizePromise = this.context.client.run("setSize", {
       viewName, size: { width, height }
@@ -93,23 +93,24 @@ class Superview extends Component {
       viewName,
       constraints: this.props.constraints &&
         this.props.constraints.map((c) => c.build()) || []
-    }).then(() => {
-      return this.context.client.run("addConstraints", {
-        viewName,
-        constraints: nextProps.constraints &&
-          nextProps.constraints.map((c) => c.build()) || []
-      });
-    }).then(() => resizePromise);
+    })
+    .then(() => this.context.client.run("addConstraints", {
+      viewName,
+      constraints: nextProps.constraints &&
+        nextProps.constraints.map((c) => c.build()) || []
+    }))
+    .then(() => resizePromise);
 
     const layoutPromise = onlyHasNewSize
       ? resizePromise
       : reconstrainPromise;
 
-    layoutPromise.then((layout) => this.onLayout(layout));
+    layoutPromise
+      .then((layout) => this.onLayout(layout));
   }
 
   onLayout(subviews: Array<SubView>) {
-    this.setState({ subviews });
+    this.setState({ subviews }, () => this.forceUpdate());
   }
 
   getChildContext(): { subviews: ?Array<SubView> } {
@@ -121,6 +122,7 @@ class Superview extends Component {
     const newProps = {
       style: { width, height, ...style}
     };
+
     return createElement(container, newProps, children);
   }
 }

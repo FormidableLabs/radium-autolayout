@@ -9,6 +9,7 @@ type WorkerEventHandler = (event: WorkerEvent) => mixed;
 declare class Worker {
   constructor(URL: ?string): void;
   onmessage: WorkerEventHandler;
+  onerror: WorkerEventHandler;
   postMessage(messsage: Cloneable): void;
   terminate(): void;
 }
