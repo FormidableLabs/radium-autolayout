@@ -5,6 +5,8 @@ import type { WorkerArgs } from "./engine";
 import type { Proxyable } from "./worker-proxy";
 import WorkerProxy from "./worker-proxy";
 
+const DEFAULT_THREAD_COUNT = 4;
+
 const LayoutWorker = () => {
   return new Worker(
     URL.createObjectURL(new Blob(
@@ -13,7 +15,6 @@ const LayoutWorker = () => {
     ))
   );
 };
-const DEFAULT_THREAD_COUNT = 4;
 
 export default class LayoutClient {
   views: { [key: string]: ?{ workerId: number } };
@@ -48,18 +49,16 @@ export default class LayoutClient {
     size: { width: number, height: number },
     spacing: Array<number>,
     callback: () => void
-  ) {
+  ): Promise<any> {
     if (this.views[viewName]) {
-      return;
+      return Promise.reject("View already exists!");
     }
 
     this.views[viewName] = {
       workerId: this.currentWorker, callback
     };
 
-    this.workers[this.currentWorker].run("registerView", {
-      viewName, size, spacing
-    }, callback);
+    const currentWorker = this.currentWorker;
 
     // Cycle through the worker pool
     if (this.currentWorker === this.workers.length - 1) {
@@ -67,6 +66,12 @@ export default class LayoutClient {
     } else {
       this.currentWorker++;
     }
+
+    return new Promise((resolve) => {
+      this.workers[currentWorker].run("registerView", {
+        viewName, size, spacing
+      }, resolve);
+    });
   }
 
   deregisterView(viewName: string, callback: () => void) {
@@ -88,15 +93,15 @@ export default class LayoutClient {
     return this.workers[this.views[viewName].workerId];
   }
 
-  run(
-    method: string,
-    args: WorkerArgs,
-    callback: ((result: ?Cloneable) => void)
-  ) {
+  run(method: string, args: WorkerArgs): Promise<any> {
     const worker = this.workerForView(args.viewName);
-    if (worker) {
-      worker.run(method, args, callback);
-    }
+    return new Promise((resolve, reject) => {
+      if (worker) {
+        worker.run(method, args, resolve);
+      } else {
+        reject("No worker found for this view. Did you register it?");
+      }
+    });
   }
 
   terminate() {

@@ -2,12 +2,12 @@ declare module "autolayout" {
   declare type Relation =
     | "equ"
     | "leq"
-    | "geq"
+    | "geq";
 
   declare type Priority =
     | 1000
     | 750
-    | 250
+    | 250;
 
   declare type Constraint = {
     view1?: ?string,
@@ -63,12 +63,12 @@ declare module "autolayout/lib/kiwi/View" {
   declare type Relation =
     | "equ"
     | "leq"
-    | "geq"
+    | "geq";
 
   declare type Priority =
     | 1000
     | 750
-    | 250
+    | 250;
 
   declare type Constraint = {
     view1?: ?string,
@@ -119,5 +119,5 @@ declare module "autolayout/lib/kiwi/View" {
     addConstraints(constraints: Array<Constraint>): View;
   }
 
-  declare function exports(): View
+  declare function exports(): View;
 }

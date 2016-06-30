@@ -1,5 +1,6 @@
 // @flow
 /* eslint-env worker */
+/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 import type { SubView } from "autolayout";
 import type ConstraintBuilder from "./constraint-builder";
 import View from "autolayout/lib/kiwi/View";
@@ -27,7 +28,48 @@ export type WorkerArgs = {
     intrinsicHeight: number
   },
   constraints?: Array<ConstraintBuilder>
-}
+};
+
+type RegistrationArgs = {
+  viewName: string,
+  size?: {
+    width: number,
+    height: number
+  },
+  spacing?: Array<number>,
+};
+
+type SpacingArgs = {
+  viewName: string,
+  spacing: Array<number>
+};
+
+type SizeArgs = {
+  viewName: string,
+  size: {
+    width: number,
+    height: number
+  }
+};
+
+type IntrinsicsArgs = {
+  viewName: string,
+  subviewName: string,
+  intrinsics: {
+    intrinsicWidth: number,
+    intrinsicHeight: number
+  }
+};
+
+type ConstraintsArgs = {
+  viewName: string,
+  constraints: Array<ConstraintBuilder>
+};
+
+type InitializeArgs = {
+  viewName: string,
+  layoutProps: Object,
+};
 
 // Decorates engine methods to post a "callback"
 // message to the main thread with the method
@@ -52,68 +94,58 @@ export default class Engine {
     this.views = {};
   }
 
-  registerView(args: WorkerArgs): bool {
-    const { viewName } = args;
+  registerView({ viewName, size, spacing }: RegistrationArgs): bool {
     const view = new View();
     this.views[viewName] = view;
 
-    const size = args.size || null;
     if (size) {
       view.setSize(size.width, size.height);
     }
 
-    if (args.spacing) {
-      view.setSpacing(args.spacing);
+    if (spacing) {
+      view.setSpacing(spacing);
     }
 
     return true;
   }
 
-  deregisterView(args: WorkerArgs): bool {
-    const { viewName } = args;
+  deregisterView({ viewName }: RegistrationArgs): bool {
     this.views[viewName] = null;
     return true;
   }
 
-  setSpacing(args: WorkerArgs): ?{ [key: string]: Layout } {
-    const { viewName } = args;
+  setSpacing({ viewName, spacing }: SpacingArgs): ?{ [key: string]: Layout } {
     const view = this.views[viewName];
     if (!view) {
-      return null;
-    }
-    const spacing = args.spacing || null;
-    if (!spacing) {
+      console.warn("no view for name:", viewName);
       return null;
     }
     view.setSpacing(spacing);
     return this.subviews({ viewName });
   }
 
-  setSize(args: WorkerArgs): ?{ [key: string]: Layout } {
-    const { viewName } = args;
+  setSize({ viewName, size }: SizeArgs): ?{ [key: string]: Layout } {
     const view = this.views[viewName];
-    const size = args.size;
-    if (!view || !size) {
+    if (!view) {
+      console.warn("no view for name:", viewName);
       return null;
     }
     view.setSize(size.width, size.height);
     return this.subviews({ viewName });
   }
 
-  addIntrinsics(args: WorkerArgs): ?{ [key: string]: Layout } {
-    const { viewName } = args;
-    const subviewName = args.subviewName || null;
-    if (!subviewName) {
-      return null;
-    }
+  addIntrinsics(
+    { viewName, subviewName, intrinsics }: IntrinsicsArgs
+  ): ?{ [key: string]: Layout } {
     const view = this.views[viewName] || null;
     if (!view) {
+      console.warn("no view for name:", viewName);
       return null;
     }
-    const subview = this.getSubview(view, subviewName);
-    const intrinsics = args.intrinsics || null;
 
-    if (!subview || !intrinsics) {
+    const subview = this.getSubview(view, subviewName);
+    if (!subview) {
+      console.warn("no subview for name:", subviewName);
       return null;
     }
 
@@ -125,26 +157,45 @@ export default class Engine {
     return this.subviews({ viewName });
   }
 
-  addConstraints(args: WorkerArgs): ?{ [key: string]: Layout } {
-    const { viewName } = args;
+  addConstraints(
+    { viewName, constraints }: ConstraintsArgs
+  ): ?{ [key: string]: Layout } {
     const view = this.views[viewName];
     if (!view) {
+      console.warn("no view for name:", viewName);
       return null;
     }
-    const constraints = args.constraints || null;
-    if (!constraints) {
+
+    if (!constraints.length) {
+      console.warn("empty constraints");
       return null;
     }
+
     view.addConstraints(constraints);
     return this.subviews({ viewName });
   }
 
-  initializeSubviews(args: WorkerArgs): ?{ [key: string]: Layout } {
-    const { viewName } = args;
-    const layoutProps = args.layoutProps || null;
-    if (!layoutProps) {
+  removeConstraints(
+    { viewName, constraints }: ConstraintsArgs
+  ): ?{ [key: string]: Layout } {
+    const view = this.views[viewName];
+    if (!view) {
+      console.warn("no view for name:", viewName);
       return null;
     }
+
+    if (!constraints.length) {
+      console.warn("empty constraints");
+      return null;
+    }
+
+    view.removeConstraints(constraints);
+    return this.subviews({ viewName });
+  }
+
+  initializeSubviews(
+    { viewName, layoutProps }: InitializeArgs
+  ): ?{ [key: string]: Layout } {
     const constraints = layoutProps
       .map((element) => element.constraints)
       .filter((constraint) => constraint)
@@ -169,9 +220,10 @@ export default class Engine {
     return this.subviews({ viewName });
   }
 
-  subviews(args: WorkerArgs): ?{ [key: string]: Layout } {
-    const view = this.views[args.viewName];
+  subviews({ viewName }: RegistrationArgs): ?{ [key: string]: Layout } {
+    const view = this.views[viewName];
     if (!view || !view.subViews) {
+      console.warn("subviews() failed for:", viewName);
       return null;
     }
 

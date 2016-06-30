@@ -2,6 +2,11 @@
 import { DOM as DOMFactories } from "react";
 import Subview from "./subview";
 
+type AnimatedDOMArgs = {
+  animatorClass: ReactClass,
+  animatorProps: (layout: Layout) => Object,
+};
+
 // This is to override any DOM nodes that can't
 // use the default position: absolute transform
 const transformers = {};
@@ -22,11 +27,25 @@ export const whitelist = [
   "select", "textarea"
 ];
 
-export default Object.keys(DOMFactories)
-  .filter((key) => whitelist.indexOf(key) !== -1)
-  .reduce((acc, key) => {
+const safeDOMFactories = Object.keys(DOMFactories)
+  .filter((key) => whitelist.indexOf(key) !== -1);
+
+export const AutoDOM = safeDOMFactories.reduce((acc, key) => {
+  acc[key] = transformers[key]
+    ? Subview({
+      layoutTransformer: transformers[key]
+    })(key)
+    : Subview()(key);
+  return acc;
+}, {});
+
+export const animateDOM = (args: AnimatedDOMArgs) =>
+  safeDOMFactories.reduce((acc, key) => {
     acc[key] = transformers[key]
-      ? Subview(key, transformers[key])
-      : Subview(key);
+      ? Subview({
+        ...args,
+        layoutTransformer: transformers[key]
+      })(key)
+      : Subview(args)(key);
     return acc;
   }, {});

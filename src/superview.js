@@ -6,6 +6,7 @@ import type LayoutClient from "./layout-client";
 import type ConstraintBuilder from "./constraint-builder";
 
 import { Component, PropTypes, createElement } from "react";
+import isEqual from "lodash.isequal";
 import UUID from "./uuid";
 import extractLayoutProps from "./extract-layout-props";
 
@@ -61,27 +62,55 @@ class Superview extends Component {
         constraints: constraints.map((c) => c.build())
       } : []);
 
-    client.registerView(name, size, spacing, () => {
-      client.run("initializeSubviews", {
+    client.registerView(name, size, spacing)
+      .then(() => client.run("initializeSubviews", {
         viewName: name, layoutProps
-      }, (layout) => this.onLayout(layout));
-    });
+      }))
+      .then((layout) => this.onLayout(layout));
   }
 
   componentWillReceiveProps(nextProps: Props) {
     const { name: viewName, width, height } = nextProps;
     const { width: oldWidth, height: oldHeight } = this.props;
-    if (width === oldWidth && height === oldHeight) {
+
+    const sameSize = width === oldWidth && height === oldHeight;
+    const sameConstraints = isEqual(
+      this.props.constraints,
+      nextProps.constraints
+    );
+
+    if (sameSize && sameConstraints) {
       return;
     }
 
-    this.context.client.run("setSize", {
+    const onlyHasNewSize = !sameSize && sameConstraints;
+
+    const resizePromise = this.context.client.run("setSize", {
       viewName, size: { width, height }
-    }, (layout) => this.onLayout(layout));
+    });
+
+    const reconstrainPromise = this.context.client.run("removeConstraints", {
+      viewName,
+      constraints: this.props.constraints &&
+        this.props.constraints.map((c) => c.build()) || []
+    })
+    .then(() => this.context.client.run("addConstraints", {
+      viewName,
+      constraints: nextProps.constraints &&
+        nextProps.constraints.map((c) => c.build()) || []
+    }))
+    .then(() => resizePromise);
+
+    const layoutPromise = onlyHasNewSize
+      ? resizePromise
+      : reconstrainPromise;
+
+    layoutPromise
+      .then((layout) => this.onLayout(layout));
   }
 
   onLayout(subviews: Array<SubView>) {
-    this.setState({ subviews });
+    this.setState({ subviews }, () => this.forceUpdate());
   }
 
   getChildContext(): { subviews: ?Array<SubView> } {
@@ -93,6 +122,7 @@ class Superview extends Component {
     const newProps = {
       style: { width, height, ...style}
     };
+
     return createElement(container, newProps, children);
   }
 }
